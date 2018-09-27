@@ -11,10 +11,10 @@ deploy jBPM into OpenShift:
 
 ```bash
 # image streams
-oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/7.0.1.GA/rhpam70-image-streams.yaml
+oc apply -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/7.0.1.GA/rhpam70-image-streams.yaml
 
 # import template
-oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/7.0.1.GA/templates/rhpam70-trial-ephemeral.yaml
+oc apply -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/7.0.1.GA/templates/rhpam70-trial-ephemeral.yaml
 
 # instantiate the template
 oc new-app -l app=jbpm --template=rhpam70-trial-ephemeral -p IMAGE_STREAM_NAMESPACE=`oc project -q`
