@@ -6,7 +6,8 @@ jBPM listener that feeds the data into Apache Kafka
 
 ## Usage
 
-deploy jBPM into openshift:
+### jBPM
+deploy jBPM into OpenShift:
 
 ```bash
 # image streams
@@ -19,6 +20,15 @@ oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-op
 oc new-app -l app=jbpm --template=rhpam70-trial-ephemeral -p IMAGE_STREAM_NAMESPACE=`oc project -q`
 ```
 
+### Kafka
+deploy Kafka into OpenShift:
+
+```bash
+oc apply -f https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/0.1.0/kafka-inmemory/resources/openshift-template.yaml
+oc new-app -l app=kafka --template=strimzi -p KAFKA_NODE_COUNT=1
+```
+
+### Add the listener
 Then in the jBPM UI do:
 
 1. upload listener jar into artifact repository (settings top right -> artifact, upload)
@@ -27,4 +37,3 @@ Then in the jBPM UI do:
 1. add event listener, id = classname, resolving mechanism = reflection
 1. create new process instance
 1. check the logs if the listener got triggered
-
