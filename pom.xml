@@ -8,6 +8,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jbpm.version>7.7.0.Final</jbpm.version>
+    <kafka-clients.version>2.0.0</kafka-clients.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -26,11 +27,24 @@
       <artifactId>jbpm-flow</artifactId>
       <scope>provided</scope>
     </dependency>
-    <!--<dependency>-->
-      <!--<groupId>org.jbpm</groupId>-->
-      <!--<artifactId>jbpm-flow-builder</artifactId>-->
-      <!--<scope>provided</scope>-->
-    <!--</dependency>-->
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-clients</artifactId>
+      <version>${kafka-clients.version}</version>
+    </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+          <target>8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
