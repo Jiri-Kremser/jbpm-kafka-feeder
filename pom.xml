@@ -10,6 +10,7 @@
     <maven.shade.version>3.2.0</maven.shade.version>
     <jbpm.version>7.7.0.Final</jbpm.version>
     <kafka-clients.version>2.0.0</kafka-clients.version>
+    <rx-java.version>2.2.2</rx-java.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -32,6 +33,17 @@
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
       <version>${kafka-clients.version}</version>
+    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>io.reactivex.rxjava2</groupId>-->
+      <!--<artifactId>rxjava</artifactId>-->
+      <!--<version>${rx-java.version}</version>-->
+    <!--</dependency>-->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.9.6</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 

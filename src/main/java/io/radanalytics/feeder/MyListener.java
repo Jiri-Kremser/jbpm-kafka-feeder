@@ -1,8 +1,16 @@
 package io.radanalytics.feeder;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.kie.api.event.process.*;
 
 public class MyListener implements ProcessEventListener {
+
+    private final Producer<String, String> producer = MyKafkaProducer.createProducer();
+    private final String topic = MyKafkaProducer.getTopic();
+    ObjectMapper mapper = new ObjectMapper();
 
     public void beforeProcessStarted(ProcessStartedEvent processStartedEvent) {
 
@@ -21,7 +29,15 @@ public class MyListener implements ProcessEventListener {
     }
 
     public void beforeNodeTriggered(ProcessNodeTriggeredEvent processNodeTriggeredEvent) {
-        System.out.println("Before Node triggered fooo: " + processNodeTriggeredEvent.getNodeInstance().getNodeName());
+        try {
+            String nodeName = processNodeTriggeredEvent.getNodeInstance().getNodeName();
+            String event = mapper.writeValueAsString(processNodeTriggeredEvent);
+            System.out.printf(nodeName + " entered, \n JSON:\n" + event);
+            final ProducerRecord<String, String> record = new ProducerRecord<>(topic, nodeName, event);
+            producer.send(record);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     public void afterNodeTriggered(ProcessNodeTriggeredEvent processNodeTriggeredEvent) {
