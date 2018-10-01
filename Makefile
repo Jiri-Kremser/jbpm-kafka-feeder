@@ -30,6 +30,11 @@ create-kafka-topic:
 undeploy:
 	oc delete all -l app.parent=makefile
 
+.PHONY: debug-kafka-msg
+debug-kafka-msg:
+	oc exec kafka-0 -- /opt/kafka/bin/kafka-console-consumer.sh --topic my-topic --bootstrap-server localhost:9092 --from-beginning
+	#oc exec kafka-0 -- /opt/kafka/bin/kafka-console-consumer.sh --topic my-topic --zookeeper zookeeper:2181 --from-beginning
+
 .PHONY: browser
 browser:
 	$(eval URL := $(shell oc get route myapp-rhpamcentr --template={{.spec.host}}))
