@@ -1,4 +1,4 @@
-IMAGE?=Jiri-Kremser/jbpm-kafka-feeder
+IMAGE?=jkremser/jbpm-kafka-feeder
 
 .PHONY: build
 build: package image-build
