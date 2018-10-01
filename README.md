@@ -25,7 +25,7 @@ deploy Kafka into OpenShift:
 
 ```bash
 oc apply -f https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/0.1.0/kafka-inmemory/resources/openshift-template.yaml
-oc new-app -l app=kafka --template=strimzi -p KAFKA_NODE_COUNT=1
+oc new-app -l app=kafka --template=strimzi
 ```
 
 ### Add the listener
