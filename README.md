@@ -30,7 +30,7 @@ oc new-app -l app=kafka --template=strimzi
 
 create new topic
 ```bash
-oc exec kafka-0 -- /opt/kafka/bin/kafka-topics.sh --create --topic my-topic2 --partitions 13 --replication-factor 3 --zookeeper zookeeper:2181
+oc exec kafka-0 -- /opt/kafka/bin/kafka-topics.sh --create --topic my-topic --partitions 13 --replication-factor 3 --zookeeper zookeeper:2181
 oc exec kafka-0 -- /opt/kafka/bin/kafka-topics.sh --list --zookeeper zookeeper:2181
 ```
 
