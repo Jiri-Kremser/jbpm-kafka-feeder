@@ -39,7 +39,8 @@ Then in the jBPM UI do:
 
 1. upload listener jar into artifact repository (settings top right -> artifact, upload)
 1. create example project (it orders for instance)
-1. go to its settings and add the listener jar as a dependency, whitelist everything
-1. add event listener, id = classname, resolving mechanism = reflection
+1. go to its settings and add the listener jar (from repository) as a dependency, whitelist everything
+1. add event listener in the Deployments tab, id = classname (`io.radanalytics.feeder.MyListener`), resolving mechanism = reflection
+1. save and deploy
 1. create new process instance
 1. check the logs if the listener got triggered

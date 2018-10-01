@@ -5,6 +5,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Optional;
 import java.util.Properties;
+import java.util.UUID;
 
 public class MyKafkaProducer {
     private static final String TOPIC_DEFAULT = "my-topic";
@@ -25,9 +26,11 @@ public class MyKafkaProducer {
 
 
     public static Producer<String, String> createProducer() {
+        // https://stackoverflow.com/questions/37363119/kafka-producer-org-apache-kafka-common-serialization-stringserializer-could-no
+        Thread.currentThread().setContextClassLoader(null);
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, getServers());
-        props.put(ProducerConfig.CLIENT_ID_CONFIG, "MyKafkaProducer");
+        props.put(ProducerConfig.CLIENT_ID_CONFIG, "MyKafkaProducer-" + UUID.randomUUID());
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         return new KafkaProducer<>(props);
