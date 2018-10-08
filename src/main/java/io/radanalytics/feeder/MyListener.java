@@ -8,9 +8,9 @@ import org.kie.api.event.process.*;
 
 public class MyListener implements ProcessEventListener {
 
-    private final Producer<String, String> producer = MyKafkaProducer.createProducer();
+    private final Producer<Long, String> producer = MyKafkaProducer.createProducer();
     private final String topic = MyKafkaProducer.getTopic();
-    ObjectMapper mapper = new ObjectMapper();
+//    ObjectMapper mapper = new ObjectMapper();
 
     public void beforeProcessStarted(ProcessStartedEvent processStartedEvent) {
 
@@ -31,12 +31,13 @@ public class MyListener implements ProcessEventListener {
     public void beforeNodeTriggered(ProcessNodeTriggeredEvent processNodeTriggeredEvent) {
         try {
             String nodeName = processNodeTriggeredEvent.getNodeInstance().getNodeName();
-            String event = mapper.writeValueAsString(processNodeTriggeredEvent);
-            System.out.printf(nodeName + " entered, \n JSON:\n" + event);
-            final ProducerRecord<String, String> record = new ProducerRecord<>(topic, nodeName, event);
+//            String event = mapper.writeValueAsString(processNodeTriggeredEvent);
+            System.out.println(nodeName + " entered, \n metadata-map:\n" + processNodeTriggeredEvent.getNodeInstance().getNode().getMetaData());
+            final ProducerRecord<Long, String> record = new ProducerRecord<>(topic, System.currentTimeMillis(), processNodeTriggeredEvent.getNodeInstance().getNode().getMetaData().toString());
             producer.send(record);
-        } catch (JsonProcessingException e) {
+        } catch (Throwable e) {
             e.printStackTrace();
+            System.err.println("Unable to send the message to Kafka topic.");
         }
     }
 

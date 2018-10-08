@@ -1,6 +1,7 @@
 package io.radanalytics.feeder;
 
 import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Optional;
@@ -25,27 +26,30 @@ public class MyKafkaProducer {
     }
 
 
-    public static Producer<String, String> createProducer() {
+    public static Producer<Long, String> createProducer() {
         // https://stackoverflow.com/questions/37363119/kafka-producer-org-apache-kafka-common-serialization-stringserializer-could-no
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(null);
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, getServers());
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "MyKafkaProducer-" + UUID.randomUUID());
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        return new KafkaProducer<>(props);
+        Producer<Long, String> producer = new KafkaProducer<>(props);
+        Thread.currentThread().setContextClassLoader(contextClassLoader);
+        return producer;
     }
 
     private static void runProducer(final int sendMessageCount) throws Exception {
         System.out.println("Running producer for configuration:");
         System.out.println("BOOTSTRAP_SERVERS: " + getServers());
         System.out.println("TOPIC: " + getTopic());
-        final Producer<String, String> producer = createProducer();
+        final Producer<Long, String> producer = createProducer();
         long time = System.currentTimeMillis();
         try {
             for (long index = time; index < time + sendMessageCount; index++) {
-                final ProducerRecord<String, String> record =
-                        new ProducerRecord<>(getTopic(), String.valueOf(index), "Hello " + index);
+                final ProducerRecord<Long, String> record =
+                        new ProducerRecord<>(getTopic(), index, "Hello " + index);
                 RecordMetadata metadata = producer.send(record).get();
                 long elapsedTime = System.currentTimeMillis() - time;
                 System.out.printf("sent record(key=%s value=%s) meta(partition=%d, offset=%d) time=%d\n",
