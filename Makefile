@@ -41,3 +41,10 @@ browser:
 	echo "Opening http://$(URL)"
 	echo -e "use these credentials:\n\n  username: adminUser\n  password: RedHat\n\n"
 	xdg-open http://$(URL) &> /dev/null
+
+.PHONY: deploy-jar
+deploy-jar:
+	$(eval POD := $(shell oc get pods -l service=myapp-rhpamcentr -o=name))
+	oc exec $(POD) -- mkdir -p /opt/eap/standalone/data/bpmsuite/maven-repository/io/radanalytics/
+	# oc is broken with cp, so let's use kubectl
+	kubectl cp ~/.m2/repository/io/radanalytics/jbpm-kafka-feeder/ $(POD):/opt/eap/standalone/data/bpmsuite/maven-repository/io/radanalytics
